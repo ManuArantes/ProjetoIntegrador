@@ -13,60 +13,45 @@
   </header>
 
   <nav>
-    <a href="../index.html">Relatos Pessoais</a>
+    <a href="../index.html">Minha História</a>
+    <a href="miastenia.html">O que é Miastenia Congênita</a>
     <a href="artigos.html">Artigos Médicos</a>
     <a href="acolhimento.html">Acolhimento</a>
+    <a href="cadastro.html">Cadastro</a>
+    <a href="referencias.html">Referências</a>
   </nav>
 
   <main>
-    <h2>O que é Miastenia Congênita?</h2>
-    <div class="descricao-miastenia">
-      <p>
-        A miastenia congênita é uma doença neuromuscular rara e hereditária que afeta a transmissão dos impulsos nervosos para os músculos. Ao contrário da miastenia gravis, que é autoimune, a forma congênita resulta de defeitos genéticos na junção neuromuscular.
-      </p>
-      <p>
-        Os sintomas podem incluir fraqueza muscular, ptose palpebral (queda das pálpebras) e dificuldade em engolir.
-      </p>
-      <p>
-        Para mais informações, você pode acessar o artigo completo
-        <a href= https://blog.clinspace.com.br/sindromes-miastenicas-congenitas-causas-sintomas-tratamentos/ target="_blank" rel="noopener noreferrer">aqui</a>.
-      </p>
-    </div>
-
     <h2>Artigos Médicos</h2>
+    <p class="info">
+      Publicações nesta aba são **exclusivas para profissionais da saúde** cadastrados.
+      <a href="cadastro.html">Realizar cadastro</a>
+    </p>
 
     <input
       type="text"
-      placeholder="Buscar artigos sobre Miastenia Congênita..."
+      placeholder="Buscar pelo nome do artigo..."
       class="inputBusca"
       id="inputBusca"
     />
 
-    <div id="lista-artigos">
-      <div class="artigo-item">
-        <a
-          href="https://www.scielo.br/j/rpp/a/HtpxhKYDYKZhw96MLzTL9dG/?lang=pt"
-          target="_blank"
-          rel="noopener noreferrer"
-          >Evento com aparente risco de morte recorrente como manifestação inicial de síndrome miastênica congênita</a
-        >
-      </div>
-    </div>
+    <div id="lista-artigos"></div>
 
     <div class="links-artigos">
-      <a
-        href="https://www.scielo.br/j/rpp/a/HtpxhKYDYKZhw96MLzTL9dG/?lang=pt"
-        target="_blank"
-        class="btn-artigo"
-        rel="noopener noreferrer"
-        >Ler Artigo 1</a
-      >
+      <button id="btnNovoArtigo">Publicar novo artigo (profissionais)</button>
     </div>
 
-    <div class="cadastro">
-      <h3>Cadastrar novo artigo</h3>
-      <p>Cadastre-se ou faça login para publicar artigos médicos na plataforma.</p>
-    </div>
+    <!-- Formulário oculto até clicar no botão -->
+    <section id="formArtigoWrap" class="bloco" style="display:none;">
+      <h3>Novo artigo</h3>
+      <form id="formArtigo" class="form-artigo">
+        <input type="text" id="art_titulo" placeholder="Título do artigo" required>
+        <input type="url" id="art_url" placeholder="URL (link público)" required>
+        <input type="text" id="art_origem" placeholder="Revista/Fonte (ex.: SciELO, NCBI)">
+        <input type="text" id="art_autor" placeholder="Autor(es)">
+        <button type="submit">Publicar</button>
+      </form>
+    </section>
   </main>
 
   <script src="../scripts/script.js"></script>

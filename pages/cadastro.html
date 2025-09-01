@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cadastro</title>
+  <link rel="stylesheet" href="../styles/estilo.css">
+</head>
+<body>
+  <header>
+    <h1>Caminho Leve MC</h1>
+    <p>Miastenia Congênita</p>
+  </header>
+  <nav>
+    <a href="../index.html">Minha História</a>
+    <a href="miastenia.html">O que é Miastenia Congênita</a>
+    <a href="artigos.html">Artigos Médicos</a>
+    <a href="acolhimento.html">Acolhimento</a>
+    <a href="cadastro.html">Cadastro</a>
+    <a href="referencias.html">Referências</a>
+  </nav>
+  <main>
+    <section class="bloco">
+      <h2>Cadastre-se ou faça login para publicar na plataforma</h2>
+      <form class="form-cadastro" onsubmit="return validarCadastro(event)">
+        <label>Nome completo:</label>
+        <input type="text" id="nome" required>
+
+        <label>CPF:</label>
+        <input type="text" id="cpf" required>
+
+        <label>Cidade e Estado:</label>
+        <input type="text" id="cidade" required>
+
+        <label>Data de Nascimento:</label>
+        <input type="date" id="nascimento" required>
+
+        <label>Tipos de Usuário:</label>
+        <div>
+          <input type="radio" name="tipo" value="paciente" onclick="mostrarRegistro(false)" required> Paciente/Familiar
+          <br>
+          <input type="radio" name="tipo" value="profissional" onclick="mostrarRegistro(true)"> Profissional da área da saúde
+        </div>
+
+        <div id="registroProfissional" style="display:none; margin-top:10px;">
+          <label>Número de registro no conselho profissional:</label>
+          <input type="text" id="registro">
+        </div>
+
+        <button type="submit">Acessar</button>
+      </form>
+      <p id="mensagemCadastro" style="margin-top:15px; font-weight:bold; color:#4a148c;"></p>
+    </section>
+  </main>
+
+  <script src="../scripts/script.js"></script>
+</body>
+</html>

@@ -1,8 +1,4 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+* { margin: 0; padding: 0; box-sizing: border-box; }
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background-color: #f8f4fc;
@@ -19,7 +15,7 @@ nav {
   background-color: #8e24aa;
   display: flex;
   justify-content: center;
-  gap: 1rem;
+  gap: 0.6rem;
   padding: 0.8rem;
   flex-wrap: wrap;
 }
@@ -31,12 +27,9 @@ nav a {
   padding: 0.4rem 0.8rem;
   border-radius: 6px;
 }
-nav a:hover {
-  background-color: #ab47bc;
-}
-main {
-  padding: 2rem;
-}
+nav a:hover { background-color: #ab47bc; }
+main { padding: 2rem; }
+
 section.bloco {
   margin-bottom: 2rem;
   background-color: #ede7f6;
@@ -44,112 +37,105 @@ section.bloco {
   border-radius: 10px;
   box-shadow: 0 1px 4px rgba(0,0,0,0.1);
 }
+
 button {
   background-color: #7b1fa2;
   color: white;
   border: none;
   padding: 0.6rem 1rem;
-  border-radius: 5px;
+  border-radius: 8px;
   margin-top: 0.5rem;
   cursor: pointer;
-  transition: background 0.3s;
+  transition: transform 0.05s ease, background 0.3s;
+  font-weight: 600;
 }
-button:hover {
-  background-color: #6a1b9a;
-}
-.botoes button {
-  margin-right: 0.5rem;
-}
-ul {
-  margin-top: 0.5rem;
-  padding-left: 1.2rem;
-  list-style-type: disc;
-}
+button:hover { background-color: #6a1b9a; }
+button:active { transform: scale(0.98); }
+
+ul { margin-top: 0.5rem; padding-left: 1.2rem; list-style-type: disc; }
 .inputBusca {
-  padding: 0.5rem;
+  padding: 0.6rem;
   width: 100%;
-  max-width: 400px;
+  max-width: 520px;
   border: 1px solid #ccc;
-  border-radius: 6px;
+  border-radius: 8px;
+  outline: none;
 }
 .cadastro {
-  margin-top: 1rem;
-  background-color: #e1bee7;
-  padding: 1rem;
-  border-radius: 8px;
+  margin-top: 1rem; background-color: #e1bee7;
+  padding: 1rem; border-radius: 8px;
 }
+
 @media (max-width: 600px) {
-  nav {
-    flex-direction: column;
-    align-items: center;
-  }
+  nav { flex-direction: column; align-items: center; }
 }
 
-.links-artigos {
-  margin: 2rem 0;
-  text-align: center;
-}
-
+/* Artigos */
+.links-artigos { margin: 1.2rem 0; text-align: left; }
 .btn-artigo {
-  background-color: #6a1b9a;
-  color: white;
-  padding: 0.8rem 1.5rem;
-  margin: 0.5rem;
-  text-decoration: none;
-  border-radius: 5px;
-  font-weight: bold;
+  background-color: #6a1b9a; color: white; padding: 0.6rem 1rem;
+  margin: 0.3rem 0; text-decoration: none; border-radius: 6px; font-weight: bold;
   display: inline-block;
-  transition: background-color 0.3s;
 }
+.btn-artigo:hover { background-color: #8e24aa; }
 
-.btn-artigo:hover {
-  background-color: #8e24aa;
-}
+#lista-artigos { margin-top: 1rem; }
+.artigo-item { margin: 0.6rem 0; background: #fff; padding: 0.8rem; border-radius: 8px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+.artigo-item a { color: #6a1b9a; text-decoration: none; font-weight: 700; font-size: 1.05rem; }
+.artigo-item a:hover { text-decoration: underline; }
+.artigo-meta { font-size: 0.9rem; color: #555; margin-top: 0.3rem; }
 
-.descricao-miastenia {
-  background-color: #ede7f6;
-  padding: 1rem 2rem;
-  border-radius: 10px;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
-  margin-bottom: 2rem;
-  font-size: 1.1rem;
-  color: #4a148c;
+/* Página “O que é Miastenia Congênita” */
+.hero-miastenia {
+  background: linear-gradient(135deg, #ede7f6, #f5e6ff);
+  padding: 1.2rem 1.2rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  margin-bottom: 1.2rem;
 }
+.grid-topicos {
+  display: grid;
+  grid-template-columns: repeat( auto-fit, minmax(240px, 1fr) );
+  gap: 1rem;
+}
+.card-topico {
+  background: #fff;
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.08);
+  border: 1px solid #eee;
+}
+.card-topico h3 { color: #4a148c; margin-bottom: 0.5rem; }
+.card-topico ul { list-style: disc; padding-left: 1.2rem; }
 
-#lista-artigos {
-  margin-top: 1rem;
+/* Formulários bonitos */
+.form-cadastro, .form-artigo, .form-forum, .form-relato, .form-resposta {
+  display: grid; gap: 0.6rem; max-width: 640px;
 }
+input[type="text"], input[type="date"], input[type="url"], textarea {
+  width: 100%; padding: 0.65rem; border: 1px solid #ccc; border-radius: 8px;
+}
+textarea { min-height: 100px; resize: vertical; }
 
-.artigo-item {
-  margin: 0.5rem 0;
+/* Fórum e Relatos */
+.tabs {
+  display: flex; gap: 0.6rem; margin-bottom: 1rem; flex-wrap: wrap;
 }
+.tab-btn { background: #e3d2ef; color: #4a148c; }
+.tab-btn.active { background: #7b1fa2; color: #fff; }
 
-.artigo-item a {
-  color: #6a1b9a;
-  text-decoration: none;
-  font-weight: 600;
-  font-size: 1.1rem;
+.lista-mensagens, .lista-relatos {
+  margin-top: 1rem; display: grid; gap: 0.8rem;
 }
+.mensagem, .relato {
+  background: #fff; border-radius: 10px; padding: 0.8rem;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.08);
+  border: 1px solid #eee;
+}
+.msg-top { display: flex; justify-content: space-between; font-size: 0.9rem; color: #666; }
+.msg-conteudo { margin: 0.4rem 0; }
+.msg-acoes { display: flex; gap: 0.5rem; }
+.respostas { margin-top: 0.6rem; padding-left: 0.8rem; border-left: 3px solid #f0e5ff; display: grid; gap: 0.5rem; }
 
-.artigo-item a:hover {
-  text-decoration: underline;
-}
-
-.foto-historia {
-  max-width: 100%;
-  height: auto;
-  margin-top: 10px;
-  border-radius: 8px;
-  box-shadow: 0 0 8px rgba(106, 27, 154, 0.5);
-  display: block;
-}
-
-.foto-historia {
-  max-width: 300px; 
-  width: 100%;      
-  height: auto;     
-  margin-top: 10px;
-  border-radius: 8px;
-  box-shadow: 0 0 8px rgba(106, 27, 154, 0.5);
-  display: block;
-}
+.badge-role { font-size: 0.75rem; padding: 0.15rem 0.45rem; border-radius: 999px; background:#ede7f6; color:#4a148c; }
+.info { font-size: 0.9rem; color: #4a148c; margin: 0.3rem 0 0.6rem; }

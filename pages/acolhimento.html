@@ -1,4 +1,3 @@
-// === arquivo: pages/acolhimento.html ===
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -13,28 +12,42 @@
     <p>Miastenia Congênita</p>
   </header>
   <nav>
-    <a href="../index.html">Relatos Pessoais</a>
+    <a href="../index.html">Minha História</a>
+    <a href="miastenia.html">O que é Miastenia Congênita</a>
     <a href="artigos.html">Artigos Médicos</a>
     <a href="acolhimento.html">Acolhimento</a>
+    <a href="cadastro.html">Cadastro</a>
+    <a href="referencias.html">Referências</a>
   </nav>
+
   <main>
     <h2>Acolhimento</h2>
-    <section>
-      <h3>Fórum</h3>
-      <p>Espaço aberto para troca de mensagens entre os usuários.</p>
-      <div class="cadastro">
-        <h4>Cadastro para enviar mensagens</h4>
-        <p>É necessário cadastro para participar do fórum.</p>
-      </div>
+    <div class="tabs">
+      <button class="tab-btn active" id="tabForum">Fórum</button>
+      <button class="tab-btn" id="tabRelatos">Relatos dos Usuários</button>
+    </div>
+
+    <!-- Fórum -->
+    <section id="secForum">
+      <p class="info">Espaço aberto para troca de mensagens. Responda, curta e converse.</p>
+      <form id="formForum" class="form-forum">
+        <textarea id="forum_texto" placeholder="Escreva sua mensagem..." required></textarea>
+        <button type="submit">Publicar no fórum</button>
+      </form>
+      <div id="listaForum" class="lista-mensagens"></div>
     </section>
-    <section>
-      <h3>Relatos dos Usuários</h3>
-      <p>Aqui você pode compartilhar sua história. Mensagens não são respondidas neste espaço.</p>
-      <div class="cadastro">
-        <h4>Cadastro para enviar relatos</h4>
-        <p>Faça login para compartilhar seu relato.</p>
-      </div>
+
+    <!-- Relatos -->
+    <section id="secRelatos" style="display:none;">
+      <p class="info">Relatos: qualquer pessoa pode publicar e curtir. (Sem respostas)</p>
+      <form id="formRelato" class="form-relato">
+        <textarea id="relato_texto" placeholder="Compartilhe seu relato..." required></textarea>
+        <button type="submit">Publicar relato</button>
+      </form>
+      <div id="listaRelatos" class="lista-relatos"></div>
     </section>
   </main>
+
+  <script src="../scripts/script.js"></script>
 </body>
 </html>
