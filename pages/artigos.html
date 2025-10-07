@@ -15,7 +15,7 @@
   <nav>
     <a href="../index.html">Minha História</a>
     <a href="miastenia.html">O que é Miastenia Congênita</a>
-    <a href="artigos.html">Artigos Médicos</a>
+    <a href="artigos.html" class="ativo">Artigos Médicos</a>
     <a href="acolhimento.html">Acolhimento</a>
     <a href="cadastro.html">Cadastro</a>
     <a href="referencias.html">Referências</a>
@@ -24,36 +24,38 @@
   <main>
     <h2>Artigos Médicos</h2>
     <p class="info">
-      Para adicionar links de Artigos Médicos sobre a Síndrome Miastenica Congênita - 
-      <a href="cadastro.html">Realize seu cadastro.</a>
+      Os artigos abaixo foram revisados e validados por nossa equipe antes de serem exibidos publicamente.
+      Usuários cadastrados podem enviar links de artigos sobre <strong>Miastenia Congênita</strong> que já estejam
+      publicados em revistas científicas ou plataformas reconhecidas. Todos os envios passam por um processo de
+      <strong>validação</strong> antes da publicação.
     </p>
 
-    <input
-      type="text"
-      placeholder="Buscar pelo nome do artigo..."
-      class="inputBusca"
-      id="inputBusca"
-    />
+    <section class="bloco lista-artigos">
+      <div class="artigo-item">
+        <a href="https://www.scielo.br/j/anp/a/JW4v4hkFCxv8GKHwtCxJmMr/?lang=pt" target="_blank" rel="noopener noreferrer">
+          Estudo neurofisiológico na síndrome miastênica congênita do canal lento: relato de caso.
+        </a>
+        <p class="artigo-meta">
+          LORENZONI, Paulo José; KAY, Cláudia Suely Kamoi; ARRUDA, Walter Oleschko; SCOLA, Rosana Herminia; WERNECK, Lineu César.
+          <br>Arquivos de Neuro-Psiquiatria, São Paulo, v. 64, n. 2A, p. 328–332, jun. 2006.
+        </p>
+      </div>
 
-    <div id="lista-artigos"></div>
-
-    <div class="links-artigos">
-      <button id="btnNovoArtigo">Publicar novo artigo</button>
-    </div>
-
-    <!-- Formulário oculto até clicar no botão -->
-
-    <!-- -->>
-    <section id="formArtigoWrap" class="bloco" style="display:none;">
-      <h3>Novo artigo</h3>
-      <form id="formArtigo" class="form-artigo">
-        <input type="text" id="art_titulo" placeholder="Título do artigo" required>
-        <input type="url" id="art_url" placeholder="URL (link público)" required>
-        <input type="text" id="art_origem" placeholder="Revista/Fonte (ex.: SciELO, NCBI)">
-        <input type="text" id="art_autor" placeholder="Autor(es)">
-        <button type="submit">Publicar</button>
-      </form>
+      <div class="artigo-item">
+        <a href="https://www.scielo.br/j/rpp/a/HtpxhKYDYKZhw96MLzTL9dG/?lang=pt" target="_blank" rel="noopener noreferrer">
+          Evento com aparente risco de morte recorrente como manifestação inicial de síndrome miastênica congênita.
+        </a>
+        <p class="artigo-meta">
+          ROMANELI, Mariana Tresoldi das Neves; CASTRO, Carla Cristina T. de S.; FRAGA, Andrea de Melo A.;
+          LOMAZI, Elizete Aparecida; NUCCI, Anamari; TRESOLDI, Antonia Teresinha.
+          <br>Revista Paulista de Pediatria, São Paulo, v. 31, n. 1, p. 130–135, mar. 2013.
+        </p>
+      </div>
     </section>
+
+    <p class="info">
+      Deseja compartilhar um novo artigo? <a href="cadastro.html">Cadastre-se aqui</a>.
+    </p>
   </main>
 
   <script src="../scripts/script.js"></script>

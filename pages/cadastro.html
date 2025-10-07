@@ -16,12 +16,18 @@
     <a href="miastenia.html">O que é Miastenia Congênita</a>
     <a href="artigos.html">Artigos Médicos</a>
     <a href="acolhimento.html">Acolhimento</a>
-    <a href="cadastro.html">Cadastro</a>
+    <a href="cadastro.html" class="ativo">Cadastro</a>
     <a href="referencias.html">Referências</a>
   </nav>
+
   <main>
     <section class="bloco">
       <h2>Cadastre-se ou faça login para publicar na plataforma</h2>
+      <p class="info">
+        Antes de se cadastrar, leia atentamente as
+        <a href="referencias.html#diretrizes" target="_blank">Diretrizes de Uso e Proteção de Dados</a>.
+      </p>
+
       <form class="form-cadastro" onsubmit="return validarCadastro(event)">
         <label>Nome completo:</label>
         <input type="text" id="nome" required>
@@ -49,6 +55,7 @@
 
         <button type="submit">Acessar</button>
       </form>
+
       <p id="mensagemCadastro" style="margin-top:15px; font-weight:bold; color:#4a148c;"></p>
     </section>
   </main>
