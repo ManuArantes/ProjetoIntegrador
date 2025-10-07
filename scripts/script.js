@@ -16,6 +16,27 @@ const load = (key, fallback) => {
 const save = (key, value) => localStorage.setItem(key, JSON.stringify(value));
 
 /***********************
+ * Moderação de conteúdo
+ ***********************/
+// Lista de palavras proibidas (adicione mais conforme necessário)
+const PALAVRAS_PROIBIDAS = [
+  "puta", "puto", "merda", "bosta", "caralho", "porra", "fdp", "filho da puta",
+  "vagabunda", "vagabundo", "otário", "otaria", "idiota", "imbecil", "burro",
+  "burra", "palhaço", "palhaça", "desgraçado", "desgraçada", "arrombado",
+  "arrombada", "corno", "corna", "escroto", "escrota", "babaca", "cretino",
+  "cretina", "nojento", "nojenta", "lixo", "moleque", "moleca", "macaco",
+  "macaca", "racista", "preconceituoso", "preconceituosa", "homofóbico",
+  "homofóbica", "viado", "veado", "sapatão", "bicha", "bichona", "bichinha",
+  "cu", "cuzão", "cuzona", "piranha", "prostituta", "prostituto", "escória"
+];
+
+// Função para verificar texto ofensivo
+function contemPalavraProibida(texto) {
+  const txt = texto.toLowerCase();
+  return PALAVRAS_PROIBIDAS.some(p => txt.includes(p));
+}
+
+/***********************
  * Sessão / Usuário
  ***********************/
 function getCurrentUser() { return load(DB_KEYS.CURRENT, null); }
@@ -137,7 +158,6 @@ function getArticles() {
     }
   ];
   const local = load(DB_KEYS.ARTICLES, []);
-  // evita duplicar seeds se já salvei alguma vez
   if (!local.some(a => a.id === "seed1")) {
     const merged = [...seed, ...local];
     save(DB_KEYS.ARTICLES, merged);
@@ -188,10 +208,7 @@ function publicarArtigo(ev) {
   ev.preventDefault();
   const user = getCurrentUser();
   if (!user) { alert("Faça login/cadastro para publicar."); return; }
-  if (user.tipo !== "profissional") {
-    alert("Somente profissionais da saúde podem publicar em Artigos Médicos.");
-    return;
-  }
+  // Qualquer usuário cadastrado pode publicar artigos
   const titulo = document.getElementById("art_titulo").value.trim();
   const url = document.getElementById("art_url").value.trim();
   const origem = document.getElementById("art_origem").value.trim();
@@ -235,15 +252,28 @@ function switchTab(tab) {
   }
 }
 
+// Administradora: troque "SeuNomeAdmin" pelo nome cadastrado da administradora
+function isAdmin(user) {
+  return user && user.nome === "SeuNomeAdmin";
+}
+
 /* Fórum: mensagem com respostas e curtidas */
 function publicarMensagem(ev) {
   ev.preventDefault();
   const user = getCurrentUser();
-  const nome = user?.nome || "Usuário";
-  const tipo = user?.tipo || "convidado";
-
+  if (!user) {
+    alert("Você precisa estar cadastrado para publicar no fórum.");
+    return;
+  }
+  const nome = user.nome || "Usuário";
+  const tipo = user.tipo || "convidado";
   const texto = document.getElementById("forum_texto").value.trim();
   if (!texto) return;
+
+  if (contemPalavraProibida(texto)) {
+    alert("Sua mensagem contém palavras ofensivas ou proibidas.");
+    return;
+  }
 
   const threads = getForum();
   threads.unshift({
@@ -252,6 +282,7 @@ function publicarMensagem(ev) {
     role: tipo,
     texto,
     likes: 0,
+    curtidores: [],
     criadoEm: new Date().toISOString(),
     respostas: []
   });
@@ -262,9 +293,16 @@ function publicarMensagem(ev) {
 
 function responderMensagem(id, texto) {
   const user = getCurrentUser();
-  const nome = user?.nome || "Usuário";
-  const tipo = user?.tipo || "convidado";
-
+  if (!user) {
+    alert("Você precisa estar cadastrado para responder.");
+    return;
+  }
+  if (contemPalavraProibida(texto)) {
+    alert("Sua resposta contém palavras ofensivas ou proibidas.");
+    return;
+  }
+  const nome = user.nome || "Usuário";
+  const tipo = user.tipo || "convidado";
   const threads = getForum();
   const t = threads.find(x => x.id === id);
   if (!t) return;
@@ -274,33 +312,71 @@ function responderMensagem(id, texto) {
     role: tipo,
     texto,
     criadoEm: new Date().toISOString(),
-    likes: 0
+    likes: 0,
+    curtidores: []
   });
   setForum(threads);
   renderForum();
 }
 
-function likeMensagem(id, isReply=false, parentId=null) {
-  const threads = getForum();
-  if (!isReply) {
-    const t = threads.find(x => x.id === id);
-    if (t) t.likes++;
-  } else {
-    const t = threads.find(x => x.id === parentId);
-    const r = t?.respostas.find(y => y.id === id);
-    if (r) r.likes++;
+// Curtir mensagem: só pode curtir uma vez e não pode curtir a própria mensagem
+function likeMensagem(id, isReply = false, parentId = null) {
+  const user = getCurrentUser();
+  if (!user) {
+    alert("Você precisa estar cadastrado para curtir.");
+    return;
   }
+  const nickname = user.nome;
+  const threads = getForum();
+  let target;
+  if (!isReply) {
+    target = threads.find(t => t.id === id);
+  } else {
+    const parent = threads.find(t => t.id === parentId);
+    target = parent?.respostas.find(r => r.id === id);
+  }
+  if (!target) return;
+  if (target.autor === nickname) {
+    alert("Você não pode curtir sua própria mensagem.");
+    return;
+  }
+  if (target.curtidores && target.curtidores.includes(nickname)) {
+    alert("Você já curtiu esta mensagem.");
+    return;
+  }
+  target.likes = (target.likes || 0) + 1;
+  if (!target.curtidores) target.curtidores = [];
+  target.curtidores.push(nickname);
   setForum(threads);
   renderForum();
+}
+
+// Apagar mensagem do fórum
+function apagarMensagem(id) {
+  if (!confirm("Tem certeza que deseja apagar esta mensagem?")) return;
+  const user = getCurrentUser();
+  const threads = getForum();
+  const idx = threads.findIndex(t => t.id === id);
+  if (idx === -1) return;
+  const t = threads[idx];
+  if (user && (t.autor === user.nome || isAdmin(user))) {
+    threads.splice(idx, 1);
+    setForum(threads);
+    renderForum();
+  } else {
+    alert("Você não tem permissão para apagar esta mensagem.");
+  }
 }
 
 function renderForum() {
   const wrap = document.getElementById("listaForum");
   if (!wrap) return;
   const threads = getForum();
+  const user = getCurrentUser();
   wrap.innerHTML = "";
 
   threads.forEach(t => {
+    const podeApagar = user && (t.autor === user.nome || isAdmin(user));
     const div = document.createElement("div");
     div.className = "mensagem";
     div.innerHTML = `
@@ -312,20 +388,25 @@ function renderForum() {
       <div class="msg-acoes">
         <button onclick="likeMensagem('${t.id}')">Curtir (${t.likes})</button>
         <button onclick="document.getElementById('resp_${t.id}').style.display='block'">Responder</button>
+        ${podeApagar ? `<button onclick="apagarMensagem('${t.id}')">Apagar</button>` : ""}
       </div>
       <div class="respostas">
-        ${t.respostas.map(r => `
-          <div class="mensagem">
-            <div class="msg-top">
-              <span><strong>${r.autor}</strong> <span class="badge-role">${r.role}</span></span>
-              <span>${new Date(r.criadoEm).toLocaleString()}</span>
+        ${t.respostas.map(r => {
+          const podeApagarResp = user && (r.autor === user.nome || isAdmin(user));
+          return `
+            <div class="mensagem">
+              <div class="msg-top">
+                <span><strong>${r.autor}</strong> <span class="badge-role">${r.role}</span></span>
+                <span>${new Date(r.criadoEm).toLocaleString()}</span>
+              </div>
+              <div class="msg-conteudo">${r.texto}</div>
+              <div class="msg-acoes">
+                <button onclick="likeMensagem('${r.id}', true, '${t.id}')">Curtir (${r.likes})</button>
+                ${podeApagarResp ? `<button onclick="apagarResposta('${t.id}', '${r.id}')">Apagar</button>` : ""}
+              </div>
             </div>
-            <div class="msg-conteudo">${r.texto}</div>
-            <div class="msg-acoes">
-              <button onclick="likeMensagem('${r.id}', true, '${t.id}')">Curtir (${r.likes})</button>
-            </div>
-          </div>
-        `).join("")}
+          `;
+        }).join("")}
       </div>
       <div id="resp_${t.id}" class="form-resposta" style="display:none; margin-top:6px;">
         <textarea id="resp_txt_${t.id}" placeholder="Escreva uma resposta..."></textarea>
@@ -336,51 +417,120 @@ function renderForum() {
   });
 }
 
+// Apagar resposta do fórum
+function apagarResposta(parentId, respostaId) {
+  if (!confirm("Tem certeza que deseja apagar esta resposta?")) return;
+  const user = getCurrentUser();
+  const threads = getForum();
+  const t = threads.find(x => x.id === parentId);
+  if (!t) return;
+  const idx = t.respostas.findIndex(r => r.id === respostaId);
+  if (idx === -1) return;
+  const r = t.respostas[idx];
+  if (user && (r.autor === user.nome || isAdmin(user))) {
+    t.respostas.splice(idx, 1);
+    setForum(threads);
+    renderForum();
+  } else {
+    alert("Você não tem permissão para apagar esta resposta.");
+  }
+}
+
 /* Relatos: apenas publicar e curtir */
 function publicarRelato(ev) {
   ev.preventDefault();
   const user = getCurrentUser();
-  const nome = user?.nome || "Usuário";
+  if (!user) {
+    alert("Você precisa estar cadastrado para publicar relatos.");
+    return;
+  }
+  const nome = user.nome || "Usuário";
+  const tipo = user.tipo || "convidado";
   const texto = document.getElementById("relato_texto").value.trim();
   if (!texto) return;
+
+  if (contemPalavraProibida(texto)) {
+    alert("Seu relato contém palavras ofensivas ou proibidas.");
+    return;
+  }
 
   const relatos = getRelatos();
   relatos.unshift({
     id: "l_" + Date.now(),
     autor: nome,
+    role: tipo,
     texto,
     criadoEm: new Date().toISOString(),
-    likes: 0
+    likes: 0,
+    curtidores: []
   });
   setRelatos(relatos);
   document.getElementById("formRelato").reset();
   renderRelatos();
 }
 
+// Curtir relato: só pode curtir uma vez e não pode curtir o próprio relato
 function likeRelato(id) {
+  const user = getCurrentUser();
+  if (!user) {
+    alert("Você precisa estar cadastrado para curtir.");
+    return;
+  }
+  const nickname = user.nome;
   const relatos = getRelatos();
   const r = relatos.find(x => x.id === id);
-  if (r) r.likes++;
+  if (!r) return;
+  if (r.autor === nickname) {
+    alert("Você não pode curtir seu próprio relato.");
+    return;
+  }
+  if (r.curtidores && r.curtidores.includes(nickname)) {
+    alert("Você já curtiu este relato.");
+    return;
+  }
+  r.likes = (r.likes || 0) + 1;
+  if (!r.curtidores) r.curtidores = [];
+  r.curtidores.push(nickname);
   setRelatos(relatos);
   renderRelatos();
+}
+
+// Apagar relato
+function apagarRelato(id) {
+  if (!confirm("Tem certeza que deseja apagar este relato?")) return;
+  const user = getCurrentUser();
+  const relatos = getRelatos();
+  const idx = relatos.findIndex(r => r.id === id);
+  if (idx === -1) return;
+  const r = relatos[idx];
+  if (user && (r.autor === user.nome || isAdmin(user))) {
+    relatos.splice(idx, 1);
+    setRelatos(relatos);
+    renderRelatos();
+  } else {
+    alert("Você não tem permissão para apagar este relato.");
+  }
 }
 
 function renderRelatos() {
   const wrap = document.getElementById("listaRelatos");
   if (!wrap) return;
   const relatos = getRelatos();
+  const user = getCurrentUser();
   wrap.innerHTML = "";
   relatos.forEach(r => {
+    const podeApagar = user && (r.autor === user.nome || isAdmin(user));
     const div = document.createElement("div");
     div.className = "relato";
     div.innerHTML = `
       <div class="msg-top">
-        <span><strong>${r.autor}</strong></span>
+        <span><strong>${r.autor}</strong> <span class="badge-role">${r.role}</span></span>
         <span>${new Date(r.criadoEm).toLocaleString()}</span>
       </div>
       <div class="msg-conteudo">${r.texto}</div>
       <div class="msg-acoes">
         <button onclick="likeRelato('${r.id}')">Curtir (${r.likes})</button>
+        ${podeApagar ? `<button onclick="apagarRelato('${r.id}')">Apagar</button>` : ""}
       </div>
     `;
     wrap.appendChild(div);
@@ -400,8 +550,7 @@ document.addEventListener("DOMContentLoaded", () => {
       btn.addEventListener("click", () => {
         const user = getCurrentUser();
         if (!user) return alert("Você precisa fazer cadastro/login.");
-        if (user.tipo !== "profissional")
-          return alert("Somente profissionais da saúde podem publicar nesta aba.");
+        // Qualquer usuário cadastrado pode publicar artigos
         toggleFormArtigo();
       });
     }

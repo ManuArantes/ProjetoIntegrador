@@ -11,17 +11,19 @@
     <h1>Caminho Leve MC</h1>
     <p>Miastenia Congênita</p>
   </header>
+
   <nav>
     <a href="../index.html">Minha História</a>
     <a href="miastenia.html">O que é Miastenia Congênita</a>
     <a href="artigos.html">Artigos Médicos</a>
-    <a href="acolhimento.html">Acolhimento</a>
+    <a href="acolhimento.html" class="ativo">Acolhimento</a>
     <a href="cadastro.html">Cadastro</a>
     <a href="referencias.html">Referências</a>
   </nav>
 
   <main>
     <h2>Acolhimento</h2>
+
     <div class="tabs">
       <button class="tab-btn active" id="tabForum">Fórum</button>
       <button class="tab-btn" id="tabRelatos">Relatos dos Usuários</button>
@@ -30,28 +32,120 @@
     <!-- Fórum -->
     <section id="secForum">
       <p class="info">Espaço aberto para troca de mensagens. Responda, curta e converse.</p>
-      <form id="formForum" class="form-forum">
-        <textarea id="forum_texto" placeholder="Escreva sua mensagem..." required></textarea>
+
+      <form id="formForum" class="form-forum" method="post" action="../process/processa_forum.php">
+        <textarea name="texto" placeholder="Escreva sua mensagem..." required></textarea>
         <button type="submit">Publicar no fórum</button>
       </form>
-      <div id="listaForum" class="lista-mensagens"></div>
+
+      <div id="avisoLoginForum" style="color:red; display:none;">
+        Você precisa estar cadastrado para publicar no fórum.
+      </div>
+
+      <div id="listaForum" class="lista-mensagens">
+        <?php
+        // Conexão com o banco
+        include '../config/database.php';
+
+        $sql = "SELECT f.id, f.texto, f.criado_em, f.likes, u.nickname 
+                FROM forum f 
+                INNER JOIN usuarios u ON f.autor_id = u.id 
+                ORDER BY f.criado_em DESC";
+        $result = $conn->query($sql);
+
+        if ($result->num_rows > 0) {
+          while($row = $result->fetch_assoc()) {
+            echo '<div class="mensagem">';
+            echo '<strong>'.$row["nickname"].'</strong> <span style="font-size:0.85rem;color:#555;">'.$row["criado_em"].'</span>';
+            echo '<p>'.$row["texto"].'</p>';
+            echo '<span>Likes: '.$row["likes"].'</span>';
+            echo '</div>';
+          }
+        } else {
+          echo '<p>Nenhuma mensagem ainda.</p>';
+        }
+        ?>
+      </div>
     </section>
 
     <!-- Relatos -->
     <section id="secRelatos" style="display:none;">
       <p class="info">Relatos: qualquer pessoa pode publicar e curtir. (Sem respostas)</p>
-      <form id="formRelato" class="form-relato">
-        <textarea id="relato_texto" placeholder="Compartilhe seu relato..." required></textarea>
+
+      <form id="formRelato" class="form-relato" method="post" action="../process/processa_relato.php">
+        <textarea name="texto" placeholder="Compartilhe seu relato..." required></textarea>
         <button type="submit">Publicar relato</button>
       </form>
-      <div id="listaRelatos" class="lista-relatos"></div>
+
+      <div id="avisoLoginRelato" style="color:red; display:none;">
+        Você precisa estar cadastrado para publicar relatos.
+      </div>
+
+      <div id="listaRelatos" class="lista-relatos">
+        <?php
+        $sqlRelatos = "SELECT r.id, r.texto, r.criado_em, r.likes, u.nickname 
+                       FROM relatos r 
+                       INNER JOIN usuarios u ON r.autor_id = u.id 
+                       ORDER BY r.criado_em DESC";
+        $resultRelatos = $conn->query($sqlRelatos);
+
+        if ($resultRelatos->num_rows > 0) {
+          while($row = $resultRelatos->fetch_assoc()) {
+            echo '<div class="relato">';
+            echo '<strong>'.$row["nickname"].'</strong> <span style="font-size:0.85rem;color:#555;">'.$row["criado_em"].'</span>';
+            echo '<p>'.$row["texto"].'</p>';
+            echo '<span>Likes: '.$row["likes"].'</span>';
+            echo '</div>';
+          }
+        } else {
+          echo '<p>Nenhum relato ainda.</p>';
+        }
+        ?>
+      </div>
     </section>
   </main>
 
-   <footer>
+  <footer>
     <p>&copy; 2025 Caminho Leve MC — Desenvolvido por Emanuelly Arantes de Oliveira</p>
   </footer>
 
   <script src="../scripts/script.js"></script>
+  <script>
+    // Alternar abas
+    const tabForum = document.getElementById('tabForum');
+    const tabRelatos = document.getElementById('tabRelatos');
+    const secForum = document.getElementById('secForum');
+    const secRelatos = document.getElementById('secRelatos');
+
+    tabForum.addEventListener('click', () => {
+      tabForum.classList.add('active');
+      tabRelatos.classList.remove('active');
+      secForum.style.display = 'block';
+      secRelatos.style.display = 'none';
+    });
+
+    tabRelatos.addEventListener('click', () => {
+      tabRelatos.classList.add('active');
+      tabForum.classList.remove('active');
+      secForum.style.display = 'none';
+      secRelatos.style.display = 'block';
+    });
+
+    // Verifica usuário logado via localStorage
+    document.addEventListener("DOMContentLoaded", function() {
+      const user = JSON.parse(localStorage.getItem("clmc_current_user"));
+      const formForum = document.getElementById("formForum");
+      const avisoForum = document.getElementById("avisoLoginForum");
+      const formRelato = document.getElementById("formRelato");
+      const avisoRelato = document.getElementById("avisoLoginRelato");
+
+      if (!user) {
+        if(formForum) formForum.style.display = 'none';
+        if(avisoForum) avisoForum.style.display = 'block';
+        if(formRelato) formRelato.style.display = 'none';
+        if(avisoRelato) avisoRelato.style.display = 'block';
+      }
+    });
+  </script>
 </body>
 </html>

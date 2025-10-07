@@ -25,66 +25,42 @@
     <section class="bloco">
       <h2>Cadastre-se ou faça login para publicar na plataforma</h2>
 
-      <p class="info">
-        Antes de se cadastrar, leia atentamente as
-        <a href="referencias.html#diretrizes" target="_blank">Diretrizes de Uso e Proteção de Dados</a>.
-      </p>
-      <br>
-
-      <!-- FORMULÁRIO DE CADASTRO -->
-      <form class="form-cadastro" method="post" action="processa_cadastro.php" onsubmit="return validarCadastro(event)">
-        
+      <form class="form-cadastro" method="post" action="../process/processa_cadastro.php">
         <label>Nome completo:</label>
-        <input type="text" id="nome" name="nome" required>
+        <input type="text" name="nome" required>
 
-        <label>Nickname (Nome que será apresentado na plataforma):</label>
-        <input type="text" id="nickname" name="nickname" required>
+        <label>Nickname:</label>
+        <input type="text" name="nickname" required>
 
         <label>CPF:</label>
-        <input type="text" id="cpf" name="cpf" required>
+        <input type="text" name="cpf" required>
 
         <label>Cidade:</label>
-        <input type="text" id="cidade" name="cidade" required>
+        <input type="text" name="cidade" required>
 
         <label>Estado:</label>
-        <input type="text" id="estado" name="estado" required>
+        <input type="text" name="estado" required>
 
         <label>Data de Nascimento:</label>
-        <input type="date" id="nascimento" name="nascimento" required>
+        <input type="date" name="nascimento" required>
 
         <label>Perfil:</label>
-        <div class="perfil-opcoes">
-          <input type="radio" name="perfil" value="paciente" onclick="mostrarRegistro(false)" required> Paciente <br>
-          <input type="radio" name="perfil" value="familiar" onclick="mostrarRegistro(false)"> Familiar <br>
-          <input type="radio" name="perfil" value="amigo" onclick="mostrarRegistro(false)"> Amigo(a) <br>
-          <input type="radio" name="perfil" value="simpatizante" onclick="mostrarRegistro(false)"> Simpatizante <br>
-          <input type="radio" name="perfil" value="profissional" onclick="mostrarRegistro(true)"> Profissional da área da saúde
-        </div>
+        <input type="radio" name="perfil" value="paciente" required> Paciente
+        <input type="radio" name="perfil" value="familiar"> Familiar
+        <input type="radio" name="perfil" value="amigo"> Amigo(a)
+        <input type="radio" name="perfil" value="simpatizante"> Simpatizante
+        <input type="radio" name="perfil" value="profissional"> Profissional
 
-        <div id="registroProfissional" style="display:none; margin-top:10px;">
-          <label>Número de registro no conselho profissional:</label>
-          <input type="text" id="registro" name="registro">
-        </div>
-
-        <div class="diretrizes-check">
-          <input type="checkbox" id="concordo" name="concordo" required>
-          <label for="concordo">
-            Li e concordo com as 
-            <a href="referencias.html#diretrizes" target="_blank">Diretrizes de Uso e Proteção de Dados</a>.
-          </label>
-        </div>
+        <label>Número de registro (se profissional):</label>
+        <input type="text" name="registro">
 
         <button type="submit">Cadastrar</button>
       </form>
-
-      <p id="mensagemCadastro" style="margin-top:15px; font-weight:bold; color:#4a148c;"></p>
     </section>
   </main>
 
-   <footer>
+  <footer>
     <p>&copy; 2025 Caminho Leve MC — Desenvolvido por Emanuelly Arantes de Oliveira</p>
   </footer>
-
-  <script src="../scripts/script.js"></script>
 </body>
 </html>
