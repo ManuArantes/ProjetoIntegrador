@@ -11,6 +11,7 @@
     <h1>Caminho Leve MC</h1>
     <p>Miastenia Congênita</p>
   </header>
+
   <nav>
     <a href="../index.html">Minha História</a>
     <a href="miastenia.html">O que é Miastenia Congênita</a>
@@ -23,37 +24,56 @@
   <main>
     <section class="bloco">
       <h2>Cadastre-se ou faça login para publicar na plataforma</h2>
+
       <p class="info">
         Antes de se cadastrar, leia atentamente as
         <a href="referencias.html#diretrizes" target="_blank">Diretrizes de Uso e Proteção de Dados</a>.
       </p>
 
-      <form class="form-cadastro" onsubmit="return validarCadastro(event)">
+      <!-- FORMULÁRIO DE CADASTRO -->
+      <form class="form-cadastro" method="post" action="processa_cadastro.php" onsubmit="return validarCadastro(event)">
+        
         <label>Nome completo:</label>
-        <input type="text" id="nome" required>
+        <input type="text" id="nome" name="nome" required>
+
+        <label>Nickname (Nome que será apresentado na plataforma):</label>
+        <input type="text" id="nickname" name="nickname" required>
 
         <label>CPF:</label>
-        <input type="text" id="cpf" required>
+        <input type="text" id="cpf" name="cpf" required>
 
-        <label>Cidade e Estado:</label>
-        <input type="text" id="cidade" required>
+        <label>Cidade:</label>
+        <input type="text" id="cidade" name="cidade" required>
+
+        <label>Estado:</label>
+        <input type="text" id="estado" name="estado" required>
 
         <label>Data de Nascimento:</label>
-        <input type="date" id="nascimento" required>
+        <input type="date" id="nascimento" name="nascimento" required>
 
-        <label>Tipos de Usuário:</label>
-        <div>
-          <input type="radio" name="tipo" value="paciente" onclick="mostrarRegistro(false)" required> Paciente/Familiar
-          <br>
-          <input type="radio" name="tipo" value="profissional" onclick="mostrarRegistro(true)"> Profissional da área da saúde
+        <label>Perfil:</label>
+        <div class="perfil-opcoes">
+          <input type="radio" name="perfil" value="paciente" onclick="mostrarRegistro(false)" required> Paciente <br>
+          <input type="radio" name="perfil" value="familiar" onclick="mostrarRegistro(false)"> Familiar <br>
+          <input type="radio" name="perfil" value="amigo" onclick="mostrarRegistro(false)"> Amigo(a) <br>
+          <input type="radio" name="perfil" value="simpatizante" onclick="mostrarRegistro(false)"> Simpatizante <br>
+          <input type="radio" name="perfil" value="profissional" onclick="mostrarRegistro(true)"> Profissional da área da saúde
         </div>
 
         <div id="registroProfissional" style="display:none; margin-top:10px;">
           <label>Número de registro no conselho profissional:</label>
-          <input type="text" id="registro">
+          <input type="text" id="registro" name="registro">
         </div>
 
-        <button type="submit">Acessar</button>
+        <div class="diretrizes-check">
+          <input type="checkbox" id="concordo" name="concordo" required>
+          <label for="concordo">
+            Li e concordo com as 
+            <a href="referencias.html#diretrizes" target="_blank">Diretrizes de Uso e Proteção de Dados</a>.
+          </label>
+        </div>
+
+        <button type="submit">Cadastrar</button>
       </form>
 
       <p id="mensagemCadastro" style="margin-top:15px; font-weight:bold; color:#4a148c;"></p>
