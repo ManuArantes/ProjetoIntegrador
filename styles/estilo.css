@@ -1,16 +1,40 @@
+/* ------------------------ */
+/* ESTILOS GERAIS */
+/* ------------------------ */
 * { margin: 0; padding: 0; box-sizing: border-box; }
+
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background-color: #f8f4fc;
   color: #333;
+  line-height: 1.6;
 }
+
+/* ------------------------ */
+/* CABEÇALHO */
+/* ------------------------ */
 header {
-  background-color: #6a1b9a;
-  padding: 1rem;
+  background: linear-gradient(135deg, #6a1b9a, #8e24aa);
+  padding: 2rem 1rem;
   text-align: center;
   color: white;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
 }
+
+header h1 {
+  font-size: 2.2rem;
+  letter-spacing: 1px;
+}
+
+header p {
+  margin-top: 0.3rem;
+  font-size: 1.1rem;
+  opacity: 0.9;
+}
+
+/* ------------------------ */
+/* MENU */
+/* ------------------------ */
 nav {
   background-color: #8e24aa;
   display: flex;
@@ -18,59 +42,145 @@ nav {
   gap: 0.6rem;
   padding: 0.8rem;
   flex-wrap: wrap;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.15);
 }
+
 nav a {
   color: white;
   text-decoration: none;
   font-weight: bold;
-  transition: background 0.3s;
-  padding: 0.4rem 0.8rem;
-  border-radius: 6px;
+  transition: all 0.3s;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
 }
-nav a:hover { background-color: #ab47bc; }
-main { padding: 2rem; }
 
+nav a:hover {
+  background-color: #ab47bc;
+  transform: scale(1.05);
+}
+
+nav a.ativo {
+  background-color: #ab47bc;
+  border-radius: 6px;
+  box-shadow: 0 0 10px rgba(255,255,255,0.2);
+}
+
+/* ------------------------ */
+/* CONTEÚDO PRINCIPAL */
+/* ------------------------ */
+main {
+  padding: 2rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+main h2 {
+  color: #4a148c;
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 1.8rem;
+  position: relative;
+}
+
+main h2::after {
+  content: "";
+  display: block;
+  width: 80px;
+  height: 3px;
+  background: #7b1fa2;
+  margin: 0.4rem auto 0;
+  border-radius: 2px;
+}
+
+/* ------------------------ */
+/* SEÇÕES EM BLOCO */
+/* ------------------------ */
 section.bloco {
   margin-bottom: 2rem;
   background-color: #ede7f6;
-  padding: 1.2rem;
-  border-radius: 10px;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
+section.bloco:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+}
+
+section.bloco h3 {
+  color: #4a148c;
+  margin-bottom: 0.8rem;
+  font-size: 1.3rem;
+}
+
+/* ------------------------ */
+/* BOTÕES */
+/* ------------------------ */
 button {
   background-color: #7b1fa2;
   color: white;
   border: none;
-  padding: 0.6rem 1rem;
-  border-radius: 8px;
+  padding: 0.7rem 1.2rem;
+  border-radius: 10px;
   margin-top: 0.5rem;
   cursor: pointer;
   transition: transform 0.05s ease, background 0.3s;
   font-weight: 600;
+  font-size: 1rem;
 }
-button:hover { background-color: #6a1b9a; }
-button:active { transform: scale(0.98); }
+button:hover { background-color: #6a1b9a; transform: translateY(-1px); }
+button:active { transform: scale(0.97); }
 
-ul { margin-top: 0.5rem; padding-left: 1.2rem; list-style-type: disc; }
-.inputBusca {
-  padding: 0.6rem;
+/* ------------------------ */
+/* FORMULÁRIOS */
+/* ------------------------ */
+.form-cadastro, .form-artigo, .form-forum, .form-relato, .form-resposta {
+  display: grid;
+  gap: 0.6rem;
+  max-width: 640px;
+}
+
+input[type="text"],
+input[type="date"],
+input[type="url"],
+input[type="password"],
+textarea,
+select {
   width: 100%;
-  max-width: 520px;
+  padding: 0.65rem;
   border: 1px solid #ccc;
   border-radius: 8px;
-  outline: none;
-}
-.cadastro {
-  margin-top: 1rem; background-color: #e1bee7;
-  padding: 1rem; border-radius: 8px;
 }
 
-@media (max-width: 600px) {
-  nav { flex-direction: column; align-items: center; }
+textarea { min-height: 100px; resize: vertical; }
+
+label { font-weight: 600; color: #4a148c; }
+
+/* ------------------------ */
+/* FÓRUM E RELATOS */
+/* ------------------------ */
+.tabs { display: flex; gap: 0.6rem; margin-bottom: 1rem; flex-wrap: wrap; }
+.tab-btn { background: #e3d2ef; color: #4a148c; }
+.tab-btn.active { background: #7b1fa2; color: #fff; }
+
+.lista-mensagens, .lista-relatos {
+  margin-top: 1rem;
+  display: grid;
+  gap: 0.8rem;
+}
+.mensagem, .relato {
+  background: #fff;
+  border-radius: 10px;
+  padding: 0.8rem;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.08);
+  border: 1px solid #eee;
 }
 
-/* Artigos */
+/* ------------------------ */
+/* ARTIGOS */
+/* ------------------------ */
 .links-artigos { margin: 1.2rem 0; text-align: left; }
 .btn-artigo {
   background-color: #6a1b9a; color: white; padding: 0.6rem 1rem;
@@ -80,12 +190,25 @@ ul { margin-top: 0.5rem; padding-left: 1.2rem; list-style-type: disc; }
 .btn-artigo:hover { background-color: #8e24aa; }
 
 #lista-artigos { margin-top: 1rem; }
-.artigo-item { margin: 0.6rem 0; background: #fff; padding: 0.8rem; border-radius: 8px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
-.artigo-item a { color: #6a1b9a; text-decoration: none; font-weight: 700; font-size: 1.05rem; }
+.artigo-item {
+  margin: 0.6rem 0;
+  background: #fff;
+  padding: 0.8rem;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+}
+.artigo-item a {
+  color: #6a1b9a;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 1.05rem;
+}
 .artigo-item a:hover { text-decoration: underline; }
 .artigo-meta { font-size: 0.9rem; color: #555; margin-top: 0.3rem; }
 
-/* Página “O que é Miastenia Congênita” */
+/* ------------------------ */
+/* MIATENIA CONGÊNITA */
+/* ------------------------ */
 .hero-miastenia {
   background: linear-gradient(135deg, #ede7f6, #f5e6ff);
   padding: 1.2rem 1.2rem;
@@ -108,30 +231,9 @@ ul { margin-top: 0.5rem; padding-left: 1.2rem; list-style-type: disc; }
 .card-topico h3 { color: #4a148c; margin-bottom: 0.5rem; }
 .card-topico ul { list-style: disc; padding-left: 1.2rem; }
 
-/* Formulários */
-.form-cadastro, .form-artigo, .form-forum, .form-relato, .form-resposta {
-  display: grid; gap: 0.6rem; max-width: 640px;
-}
-input[type="text"], input[type="date"], input[type="url"], textarea {
-  width: 100%; padding: 0.65rem; border: 1px solid #ccc; border-radius: 8px;
-}
-textarea { min-height: 100px; resize: vertical; }
-
-/* Fórum e Relatos */
-.tabs { display: flex; gap: 0.6rem; margin-bottom: 1rem; flex-wrap: wrap; }
-.tab-btn { background: #e3d2ef; color: #4a148c; }
-.tab-btn.active { background: #7b1fa2; color: #fff; }
-
-.lista-mensagens, .lista-relatos {
-  margin-top: 1rem; display: grid; gap: 0.8rem;
-}
-.mensagem, .relato {
-  background: #fff; border-radius: 10px; padding: 0.8rem;
-  box-shadow: 0 1px 6px rgba(0,0,0,0.08);
-  border: 1px solid #eee;
-}
-
-/* Referências */
+/* ------------------------ */
+/* REFERÊNCIAS */
+/* ------------------------ */
 .referencias h2 {
   color: #4a148c;
   margin-bottom: 1.2rem;
@@ -162,7 +264,9 @@ textarea { min-height: 100px; resize: vertical; }
 }
 .lista-referencias a:hover { text-decoration: underline; color: #8e24aa; }
 
-/* Diretrizes */
+/* ------------------------ */
+/* DIRETRIZES */
+/* ------------------------ */
 .diretrizes h2 { color: #4a148c; text-align: center; margin-bottom: 1rem; }
 .diretrizes p, .diretrizes ul { margin-bottom: 0.8rem; }
 .lista-regras li {
@@ -174,8 +278,24 @@ textarea { min-height: 100px; resize: vertical; }
 }
 .lista-regras li strong { color: #6a1b9a; }
 
-/* Menu ativo */
-nav a.ativo {
-  background-color: #ab47bc;
-  border-radius: 6px;
+/* ------------------------ */
+/* RODAPÉ */
+/* ------------------------ */
+footer {
+  background-color: #6a1b9a;
+  color: white;
+  text-align: center;
+  padding: 1rem;
+  margin-top: 3rem;
+  font-size: 0.9rem;
+  box-shadow: 0 -2px 6px rgba(0,0,0,0.1);
+}
+
+/* ------------------------ */
+/* RESPONSIVIDADE */
+/* ------------------------ */
+@media (max-width: 600px) {
+  nav { flex-direction: column; align-items: center; }
+  header h1 { font-size: 1.8rem; }
+  main { padding: 1.2rem; }
 }
